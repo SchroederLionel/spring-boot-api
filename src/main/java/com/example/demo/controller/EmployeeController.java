@@ -30,11 +30,6 @@ public class EmployeeController {
 		return employeeService.getAllEmployees();
 	}
 	
-	@GetMapping("/employees/email")
-	public ResponseEntity<Boolean> getEmployeeByEmail(@RequestParam String email){
-		boolean employeeAlreadyExists = employeeService.existsByEmail(email);
-		return new ResponseEntity<Boolean>(employeeAlreadyExists,HttpStatus.OK);
-	}
 	
 	@PostMapping("/employees")
 	public Employee creatEmployee(@RequestBody Employee employee) {

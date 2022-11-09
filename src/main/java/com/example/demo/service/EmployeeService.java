@@ -26,22 +26,30 @@ public class EmployeeService {
 	public Employee createEmployee(Employee employee) {
 		Boolean existsEmail = employeeRepository.existsByEmail(employee.getEmail());
 		if (existsEmail) {
+
 			throw new BadRequestException("Email " + employee.getEmail() + " taken");
 		}
 		return employeeRepository.save(employee);
 	}
 
-	public boolean existsByEmail(String email) {
-		return employeeRepository.existsByEmail(email);
-	}
 
-	public Employee getEmployeesByÎd(Long id) {
+	public Employee getEmployeeByÎd(Long id) {
 		return employeeRepository.findById(id)
-				.orElseThrow(() -> new ResourceNotFoundException("Employee does not exist!"));
+				.orElseThrow(() -> new ResourceNotFoundException("Employee with the id "+id+ " does not exist!"));
 	}
 
 	public void deleteEmployee(Employee employee) {
+		if(!employeeRepository.existsById(employee.getEmployee_id())) {
+			throw new ResourceNotFoundException("Employee with the id "+employee.getEmployee_id() +" does not exist");
+		}
 		employeeRepository.delete(employee);
+	}
+	
+	public void deleteEmployee(Long employeeId) {
+		if(!employeeRepository.existsById(employeeId)) {
+			throw new ResourceNotFoundException("Employee with the id "+employeeId +" does not exist");
+		}
+		employeeRepository.deleteById(employeeId);
 	}
 
 }
