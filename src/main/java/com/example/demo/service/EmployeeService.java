@@ -1,20 +1,19 @@
 package com.example.demo.service;
 
-import static org.mockito.ArgumentMatchers.longThat;
-
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PathVariable;
 
-import com.example.demo.dto.EmployeeLocationDTO;
+import org.springframework.stereotype.Service;
+
+import com.example.demo.exceptions.BadRequestException;
 import com.example.demo.exceptions.ResourceNotFoundException;
 import com.example.demo.model.Employee;
 import com.example.demo.repository.EmployeeRepository;
 
+import lombok.AllArgsConstructor;
+
+@AllArgsConstructor
 @Service
 public class EmployeeService {
 	@Autowired
@@ -25,19 +24,24 @@ public class EmployeeService {
 	}
 
 	public Employee createEmployee(Employee employee) {
+		Boolean existsEmail = employeeRepository.existsByEmail(employee.getEmail());
+		if (existsEmail) {
+			throw new BadRequestException("Email " + employee.getEmail() + " taken");
+		}
 		return employeeRepository.save(employee);
 	}
-	
+
 	public boolean existsByEmail(String email) {
 		return employeeRepository.existsByEmail(email);
 	}
-	
-	public Employee getEmployeesByÎdl(Long id) {
-		return employeeRepository.findById(id).orElseThrow( () -> new ResourceNotFoundException("Employee does not exist!"));
+
+	public Employee getEmployeesByÎd(Long id) {
+		return employeeRepository.findById(id)
+				.orElseThrow(() -> new ResourceNotFoundException("Employee does not exist!"));
 	}
-	
+
 	public void deleteEmployee(Employee employee) {
-		 employeeRepository.delete(employee);
+		employeeRepository.delete(employee);
 	}
 
 }
