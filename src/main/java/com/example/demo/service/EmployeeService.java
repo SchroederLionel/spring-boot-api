@@ -32,22 +32,14 @@ public class EmployeeService {
 		return employeeRepository.save(employee);
 	}
 
-
 	public Employee getEmployeeByÎd(Long id) {
 		return employeeRepository.findById(id)
-				.orElseThrow(() -> new ResourceNotFoundException("Employee with the id "+id+ " does not exist!"));
+				.orElseThrow(() -> new ResourceNotFoundException("Employee with the id " + id + " does not exist!"));
 	}
 
-	public void deleteEmployee(Employee employee) {
-		if(!employeeRepository.existsById(employee.getEmployee_id())) {
-			throw new ResourceNotFoundException("Employee with the id "+employee.getEmployee_id() +" does not exist");
-		}
-		employeeRepository.delete(employee);
-	}
-	
 	public void deleteEmployee(Long employeeId) {
-		if(!employeeRepository.existsById(employeeId)) {
-			throw new ResourceNotFoundException("Employee with the id "+employeeId +" does not exist");
+		if (!employeeRepository.existsById(employeeId)) {
+			throw new ResourceNotFoundException("Employee with the id " + employeeId + " does not exist");
 		}
 		employeeRepository.deleteById(employeeId);
 	}

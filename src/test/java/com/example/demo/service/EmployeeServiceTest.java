@@ -4,11 +4,12 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.mockitoSession;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 
 import java.util.Optional;
-
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -91,7 +92,7 @@ class EmployeeServiceTest {
 		Mockito.when(employeeRepository.findById(employee.getEmployee_id())).thenThrow(new ResourceNotFoundException(
 				"Employee with the id " + employee.getEmployee_id() + " does not exist!"));
 		// When
-		
+
 		// Then
 		assertThatThrownBy(() -> underTest.getEmployeeByÎd(employee.getEmployee_id()))
 				.isInstanceOf(ResourceNotFoundException.class)
@@ -99,8 +100,31 @@ class EmployeeServiceTest {
 	}
 
 	@Test
-	void testDeleteEmployee() {
-		fail("Not yet implemented");
+	void testDeleteEmployeeById() {
+		// Given
+		Long id = 12345678910L;
+		// when
+		Mockito.when(employeeRepository.existsById(id)).thenReturn(true);
+		underTest.deleteEmployee(id);
+		// Then
+		Mockito.verify(employeeRepository).deleteById(id);
+
+	}
+
+	@Test
+	void testDeleteEmployeeByIdThrowsResourceNotFound() {
+		// Given
+		Long id = 12345678910L;
+		// when
+		doThrow(new ResourceNotFoundException("Employee with the id " + id + " does not exist")).when(employeeRepository)
+				.existsById(id);
+		// Then
+		assertThatThrownBy(() -> underTest.deleteEmployee(id)).isInstanceOf(ResourceNotFoundException.class)
+				.hasMessage("Employee with the id " + id + " does not exist");
+
+		// check if deleteById was never called
+		verify(employeeRepository, never()).deleteById(id);
+
 	}
 
 }
