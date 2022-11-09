@@ -44,6 +44,16 @@ class EmployeeRepositoryTest {
 		// Then
 		assertThat(exists).isTrue();
 	}
+	
+	@Test
+	void testIfEmailDoesNotEmail() {
+		// Given
+		String email="email@test.com";
+		// When
+		boolean exists = underTest.existsByEmail(email);
+		// Then
+		assertThat(exists).isFalse();
+	}
 
 	@Test
 	void createEmplyoee() {
@@ -55,7 +65,8 @@ class EmployeeRepositoryTest {
 		Optional<Employee> savedEmployee = underTest.findById(employee.getEmployee_id());
 
 		// Then
-		assertEquals(savedEmployee.get(), employee);
+		assertThat(savedEmployee.get()).isEqualTo(employee);
+	
 	}
 
 	@Test
