@@ -1,5 +1,7 @@
 package com.example.demo.service;
 
+import static org.mockito.ArgumentMatchers.longThat;
+
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -15,47 +17,27 @@ import com.example.demo.repository.EmployeeRepository;
 
 @Service
 public class EmployeeService {
-@Autowired
- private EmployeeRepository employeeRepository;
- 
- public List<Employee> getAllEmployees() {
-	 return employeeRepository.findAll();
-	 //return employeeRepository.findAll().stream().map(this::convertEntityToDto).collect(Collectors.toList());
- }
- 
- public Employee createEmployee(Employee employee) {
-	 Employee newEmployee = new Employee();
-	 newEmployee.setAddresses(employee.getAddresses());
-	 return employeeRepository.save(employee);
- }
- 
- public Employee getEmployee(@PathVariable Long id) {
-	 return employeeRepository.findById(id).orElseThrow(()-> new ResourceNotFoundException("Employee does not exist with id: "+id));
- }
- 
- 
-	public Employee updateEmployee(@PathVariable Long id,Employee employeeDetails) {	
-		Employee employee = employeeRepository.findById(id).orElseThrow( () -> new ResourceNotFoundException("Employee does not exist with id: "+id));
-		employee.setFirstName(employeeDetails.getFirstName());
-		employee.setLastName(employeeDetails.getLastName());
-		employee.setEmail(employeeDetails.getEmail());
-		Employee updatedEmployee = employeeRepository.save(employee);
-		return updatedEmployee;
-			
+	@Autowired
+	private EmployeeRepository employeeRepository;
+
+	public List<Employee> getAllEmployees() {
+		return employeeRepository.findAll();
+	}
+
+	public Employee createEmployee(Employee employee) {
+		return employeeRepository.save(employee);
 	}
 	
-
-	public boolean deleteEmployee(@PathVariable Long id, Employee employee){
-		employeeRepository.deleteById(id);
-		return true;
+	public boolean existsByEmail(String email) {
+		return employeeRepository.existsByEmail(email);
 	}
- 
- 
- private EmployeeLocationDTO convertEntityToDto(Employee employee) {
-	 EmployeeLocationDTO employeeLocationDTO = new EmployeeLocationDTO();
-	 employeeLocationDTO.setEmail(employee.getEmail());
-	 employeeLocationDTO.setFirstName(employee.getFirstName());
-	 employeeLocationDTO.setUserId(employee.getId());
-	 return employeeLocationDTO;
- }
+	
+	public Employee getEmployeesByÎdl(Long id) {
+		return employeeRepository.findById(id).orElseThrow( () -> new ResourceNotFoundException("Employee does not exist!"));
+	}
+	
+	public void deleteEmployee(Employee employee) {
+		 employeeRepository.delete(employee);
+	}
+
 }

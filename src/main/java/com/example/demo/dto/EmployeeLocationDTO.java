@@ -1,29 +1,15 @@
 package com.example.demo.dto;
 
+import lombok.Getter;
+
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.Accessors;
+
+@RequiredArgsConstructor
+@Accessors(fluent=true) @Getter
 public class EmployeeLocationDTO {
-	private long userId;
+	private Long employeeId;
 	private String email;
 	private String firstName;
-	
-	
-	public long getUserId() {
-		return userId;
-	}
-	public void setUserId(long userId) {
-		this.userId = userId;
-	}
-	public String getEmail() {
-		return email;
-	}
-	public void setEmail(String email) {
-		this.email = email;
-	}
-	public String getFirstName() {
-		return firstName;
-	}
-	public void setFirstName(String firstName) {
-		this.firstName = firstName;
-	}
-	
 	
 }

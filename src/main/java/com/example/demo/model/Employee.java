@@ -1,103 +1,46 @@
 package com.example.demo.model;
 
-import java.util.List;
-
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
+
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 @Entity
-@Table(name="employees")
+@Table(name = "employees")
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class Employee {
- @Id
- @GeneratedValue(strategy = GenerationType.IDENTITY)
- @Column(name="id")
- private Long id;
- 
- @Column(name="first_name")
- private String firstName;
- 
- @Column(name="last_name")
- private String lastName;
- 
- @Column(name="email")
- private String email;
- 
- @Column(name="age")
- private Integer age;
- 
- @OneToMany(targetEntity = Address.class,cascade = CascadeType.ALL,mappedBy="id")
- private List<Address> addresses;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "employee_id")
+	private Long employee_id;
 
- public Employee() {}
-public Employee(Long id, String firstName, String lastName, String email, int age, List<Address>  addresses) {
-	super();
-	this.id = id;
-	this.firstName = firstName;
-	this.lastName = lastName;
-	this.email = email;
-	this.age = age;
-	this.addresses = addresses;
-}
+	@Column(name = "first_name")
+	private String firstName;
 
-public long getId() {
-	return id;
-}
+	@Column(name = "last_name")
+	private String lastName;
 
-public void setId(long id) {
-	this.id = id;
-}
+	@Column(name = "email")
+	private String email;
 
-public String getFirstName() {
-	return firstName;
-}
+	@Column(name = "age")
+	private Integer age;
 
-public void setFirstName(String firstName) {
-	this.firstName = firstName;
-}
+	/*
+	 * @OneToMany(mappedBy = "employee", cascade = CascadeType.ALL) private
+	 * Set<Address> addresses;
+	 */
 
-public String getLastName() {
-	return lastName;
-}
-
-public void setLastName(String lastName) {
-	this.lastName = lastName;
-}
-
-public Integer getAge() {
-	return age;
-}
-
-public void setAge(Integer age) {
-	this.age = age;
-}
-
-public List<Address> getAddresses() {
-	return addresses;
-}
-
-public void setAddresses(List<Address> addresses) {
-	this.addresses = addresses;
-}
-
-public String getEmail() {
-	return email;
-}
-
-public void setEmail(String email) {
-	this.email = email;
-}
- 
-
- 
- 
- 
 }

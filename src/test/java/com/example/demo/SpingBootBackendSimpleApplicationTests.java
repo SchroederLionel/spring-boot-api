@@ -7,7 +7,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 class SpingBootBackendSimpleApplicationTests {
 
 	@Test
-	void contextLoads() {
+	void itShouldAddEmployee() {
 	}
 
 }
