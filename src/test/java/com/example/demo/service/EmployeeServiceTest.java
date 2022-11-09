@@ -2,10 +2,9 @@ package com.example.demo.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doThrow;
-import static org.mockito.Mockito.mockitoSession;
+
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 
@@ -116,8 +115,8 @@ class EmployeeServiceTest {
 		// Given
 		Long id = 12345678910L;
 		// when
-		doThrow(new ResourceNotFoundException("Employee with the id " + id + " does not exist")).when(employeeRepository)
-				.existsById(id);
+		doThrow(new ResourceNotFoundException("Employee with the id " + id + " does not exist"))
+				.when(employeeRepository).existsById(id);
 		// Then
 		assertThatThrownBy(() -> underTest.deleteEmployee(id)).isInstanceOf(ResourceNotFoundException.class)
 				.hasMessage("Employee with the id " + id + " does not exist");
