@@ -33,17 +33,17 @@ class EmployeeControllerTest {
 	@Test
 	void testGetAllEmployees() {
 		ArrayList<Employee> employees = new ArrayList<Employee>();
-		employees.add(new Employee(12345678910L, "Lionel", "Schroeder", "schroederlionel@gmail.com", 57));
-		employees.add(new Employee(12345678910L, "Lionel", "Schroeder", "schroederlionel@gmail.com", 57));
+		employees.add(new Employee("Lionel", "Schroeder", "schroederlionel@gmail.com", 57));
+		employees.add(new Employee("Lionel", "Schroeder", "schroederlionel@gmail.com", 57));
 
 		Mockito.when(employeeService.getAllEmployees()).thenReturn(employees);
-		List<Employee> newEmployees = underTest.getAllEmployees();
-		assertThat(newEmployees).isEqualTo(employees);
+		List<Employee> response = underTest.getAllEmployees();
+		assertThat(response).isEqualTo(employees);
 	}
 
 	@Test
 	void testCreatEmployee() {
-		Employee employee = new Employee(12345678910L, "Lionel", "Schroeder", "schroederlionel@gmail.com", 57);
+		Employee employee = new Employee("Lionel", "Schroeder", "schroederlionel@gmail.com", 57);
 		Mockito.when(employeeService.createEmployee(employee)).thenReturn(employee);
 		Employee response = underTest.creatEmployee(employee);
 		assertThat(response).isEqualTo(employee);

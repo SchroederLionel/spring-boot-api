@@ -12,8 +12,14 @@ import com.example.demo.model.Employee;
 import com.example.demo.repository.EmployeeRepository;
 
 import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @AllArgsConstructor
+@NoArgsConstructor
+@Getter
+@Setter
 @Service
 public class EmployeeService {
 	@Autowired

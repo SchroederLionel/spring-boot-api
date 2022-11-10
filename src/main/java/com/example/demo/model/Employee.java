@@ -23,7 +23,7 @@ import lombok.Setter;
 public class Employee {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "employee_id")
+	@Column(name = "employee_id",nullable = false)
 	private Long employee_id;
 
 	@Column(name = "first_name")
@@ -38,9 +38,14 @@ public class Employee {
 	@Column(name = "age")
 	private Integer age;
 
-	/*
-	 * @OneToMany(mappedBy = "employee", cascade = CascadeType.ALL) private
-	 * Set<Address> addresses;
-	 */
+	public Employee(String firstName, String lastName, String email, Integer age) {
+		super();
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.email = email;
+		this.age = age;
+	}
+	
+	
 
 }
