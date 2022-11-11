@@ -18,7 +18,9 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.modelmapper.ModelMapper;
 
+import com.example.demo.dto.EmployeeDTO;
 import com.example.demo.exceptions.BadRequestException;
 import com.example.demo.exceptions.ResourceNotFoundException;
 import com.example.demo.model.Employee;
@@ -32,7 +34,7 @@ class EmployeeServiceTest {
 
 	@BeforeEach
 	void setUp() {
-		underTest = new EmployeeService(employeeRepository);
+		underTest = new EmployeeService(new ModelMapper(), employeeRepository);
 	}
 
 	@Test
@@ -46,23 +48,31 @@ class EmployeeServiceTest {
 	@Test
 	void testCreateEmployee() {
 		// Given
-		Employee employee = new Employee(12345678910L, "Lionel", "Schroeder", "schroederlionel@gmail.com", 57);
+		EmployeeDTO employee = new EmployeeDTO("Lionelasda", "Schroeder", "tesasdasdt@gmail.com", 57);
+		Employee em = new Employee(1L,"Lionelasda", "Schroeder", "tesasdasdt@gmail.com", 57);
+		
 		// When
+
+		Mockito.when(employeeRepository.save(any(Employee.class))).thenReturn(em);
 		underTest.createEmployee(employee);
+
 		// then
 		ArgumentCaptor<Employee> employeeArgumentCaptor = ArgumentCaptor.forClass(Employee.class);
 
-		verify(employeeRepository).save(employeeArgumentCaptor.capture());
+		Mockito.verify(employeeRepository).save(employeeArgumentCaptor.capture());
 
 		Employee captured = employeeArgumentCaptor.getValue();
 
-		assertThat(captured).isEqualTo(employee);
+		assertThat(captured.getEmail()).isEqualTo(employee.getEmail());
+		assertThat(captured.getAge()).isEqualTo(employee.getAge());
+		assertThat(captured.getLastName()).isEqualTo(employee.getLastName());
+
 	}
 
 	@Test
 	void testCreateEmployeeIfEmailAlreadyExistsWillThrowBadRequestException() {
 		// Given
-		Employee employee = new Employee(12345678910L, "Lionel", "Schroeder", "schroederlionel@gmail.com", 57);
+		EmployeeDTO employee = new EmployeeDTO("Lionel", "Schroeder", "schroederlionel@gmail.com", 57);
 
 		Mockito.when(employeeRepository.existsByEmail(employee.getEmail())).thenReturn(true);
 		// When
@@ -77,11 +87,15 @@ class EmployeeServiceTest {
 	@Test
 	void testGetEmployeesByÎdIfExists() {
 		// Given
-		Employee employee = new Employee(12345678910L, "Lionel", "Schroeder", "schroederlionel@gmail.com", 57);
+		long id = 1L;
+		Employee employee = new Employee(id, "Lionel", "Schroeder", "schroederlionel@gmail.com", 57);
 		Mockito.when(employeeRepository.findById(employee.getEmployee_id())).thenReturn(Optional.of(employee));
 		// When
+		EmployeeDTO response = underTest.getEmployeeByÎd(id);
 		// Then
-		assertThat(underTest.getEmployeeByÎd(employee.getEmployee_id())).isEqualTo(employee);
+
+		assertThat(response.getEmail()).isEqualTo(employee.getEmail());
+		assertThat(response.getFirstName()).isEqualTo(employee.getFirstName());
 	}
 
 	@Test
@@ -124,6 +138,27 @@ class EmployeeServiceTest {
 		// check if deleteById was never called
 		verify(employeeRepository, never()).deleteById(id);
 
+	}
+
+	@Test
+	void testEmployeeConversionFrom_DTO_TO_ENTITY() {
+		// Given
+		EmployeeDTO employeeDTO = new EmployeeDTO("Test_FIRST", "TEST_LAST", "test@email.com", 55);
+		// WHEN
+		Employee em = underTest.mapToEntity(employeeDTO);
+		// THEN
+		assertThat(employeeDTO.getEmail()).isEqualTo(em.getEmail());
+		assertThat(employeeDTO.getFirstName()).isEqualTo(em.getFirstName());
+		assertThat(employeeDTO.getLastName()).isEqualTo(em.getLastName());
+	}
+
+	@Test
+	void testEmploeeConversionFrom_ENTITY_TO_DTO() {
+		Employee employee = new Employee(1L, "Test_FIRST", "TEST_LAST", "test@email.com", 55);
+		EmployeeDTO dto = underTest.mapToDTO(employee);
+		assertThat(dto.getEmail()).isEqualTo(employee.getEmail());
+		assertThat(dto.getFirstName()).isEqualTo(employee.getFirstName());
+		assertThat(dto.getLastName()).isEqualTo(employee.getLastName());
 	}
 
 }

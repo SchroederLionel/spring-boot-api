@@ -23,7 +23,7 @@ import lombok.Setter;
 public class Employee {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "employee_id",nullable = false)
+	@Column(name = "employee_id", nullable = false)
 	private Long employee_id;
 
 	@Column(name = "first_name")
@@ -45,6 +45,7 @@ public class Employee {
 		this.email = email;
 		this.age = age;
 	}
+
 	
 	
 

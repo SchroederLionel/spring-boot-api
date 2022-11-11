@@ -23,7 +23,7 @@ import org.springframework.test.context.jdbc.SqlGroup;
 
 import org.springframework.web.client.RestTemplate;
 
-
+import com.example.demo.dto.EmployeeDTO;
 import com.example.demo.model.Employee;
 import com.example.demo.repository.EmployeeRepository;
 
@@ -37,7 +37,7 @@ class EmployeeControllerIntegretionTest {
 
 	private static RestTemplate restTemplete;
 
-	private static Employee employee;
+	private static EmployeeDTO employee;
 
 	@Autowired
 	EmployeeRepository repo;
@@ -45,7 +45,7 @@ class EmployeeControllerIntegretionTest {
 	@BeforeAll
 	public static void init() {
 		restTemplete = new RestTemplate();
-		employee = new Employee(1L, "test_firstName", "test_schmidt", "test@mail.com", 51);
+		employee = new EmployeeDTO("test_firstName", "test_schmidt", "test@mail.com", 51);
 	}
 
 	@BeforeEach
@@ -59,7 +59,7 @@ class EmployeeControllerIntegretionTest {
 
 	@Test
 	void createEmployee() {
-		Employee response = restTemplete.postForObject(baseUrl, employee, Employee.class);
+		EmployeeDTO response = restTemplete.postForObject(baseUrl, employee, EmployeeDTO.class);
 		assertThat(response.getAge()).isIn(employee.getAge());
 		assertThat(response.getFirstName()).isIn(employee.getFirstName());
 		assertThat(response.getLastName()).isIn(employee.getLastName());

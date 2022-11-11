@@ -12,6 +12,7 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import com.example.demo.dto.EmployeeDTO;
 import com.example.demo.model.Employee;
 import com.example.demo.repository.EmployeeRepository;
 import com.example.demo.service.EmployeeService;
@@ -32,20 +33,20 @@ class EmployeeControllerTest {
 
 	@Test
 	void testGetAllEmployees() {
-		ArrayList<Employee> employees = new ArrayList<Employee>();
-		employees.add(new Employee("Lionel", "Schroeder", "schroederlionel@gmail.com", 57));
-		employees.add(new Employee("Lionel", "Schroeder", "schroederlionel@gmail.com", 57));
+		ArrayList<EmployeeDTO> employees = new ArrayList<EmployeeDTO>();
+		employees.add(new EmployeeDTO("Lionel", "Schroeder", "schroederlionel@gmail.com", 57));
+		employees.add(new EmployeeDTO("Lionel", "Schroeder", "schroederlionel@gmail.com", 57));
 
 		Mockito.when(employeeService.getAllEmployees()).thenReturn(employees);
-		List<Employee> response = underTest.getAllEmployees();
+		List<EmployeeDTO> response = underTest.getAllEmployees();
 		assertThat(response).isEqualTo(employees);
 	}
 
 	@Test
 	void testCreatEmployee() {
-		Employee employee = new Employee("Lionel", "Schroeder", "schroederlionel@gmail.com", 57);
+		EmployeeDTO employee = new EmployeeDTO("Lionel", "Schroeder", "schroederlionel@gmail.com", 57);
 		Mockito.when(employeeService.createEmployee(employee)).thenReturn(employee);
-		Employee response = underTest.creatEmployee(employee);
+		EmployeeDTO response = underTest.creatEmployee(employee);
 		assertThat(response).isEqualTo(employee);
 	}
 

@@ -23,7 +23,7 @@ class EmployeeRepositoryTest {
 		// Given
 		Employee employee = new Employee("Lionel", "Schroeder", "schroederlionel@gmail.com", 57);
 		Employee employee2 = new Employee("Lionel", "Schroeder", "schroederlionel@gmail.com", 57);
-		Employee employee3 = new Employee(12345678910L, "Lionel", "Schroeder", "schroederlionel@gmail.com", 50);
+		Employee employee3 = new Employee("Lionel", "Schroeder", "schroederlionel@gmail.com", 50);
 		underTest.save(employee);
 		underTest.save(employee2);
 		underTest.save(employee3);
@@ -37,7 +37,7 @@ class EmployeeRepositoryTest {
 	@Test
 	void testExistsByEmail() {
 		// Given
-		Employee employee = new Employee("Lionel", "Schroeder", "schroederlionel@gmail.com", 57);
+		Employee employee = new Employee(1L,"Lionel", "Schroeder", "schroederlionel@gmail.com", 57);
 		underTest.save(employee);
 		// When
 		boolean exists = underTest.existsByEmail(employee.getEmail());

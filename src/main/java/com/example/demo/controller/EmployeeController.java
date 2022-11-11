@@ -2,6 +2,8 @@ package com.example.demo.controller;
 
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -15,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.demo.dto.EmployeeDTO;
 import com.example.demo.model.Employee;
 import com.example.demo.service.EmployeeService;
 
@@ -32,13 +35,13 @@ public class EmployeeController {
 
 	@GetMapping("/employees")
 	@ResponseStatus(HttpStatus.OK)
-	public List<Employee> getAllEmployees() {
+	public List<EmployeeDTO> getAllEmployees() {
 		return employeeService.getAllEmployees();
 	}
 
 	@PostMapping("/employees")
 	@ResponseStatus(HttpStatus.OK)
-	public Employee creatEmployee(@RequestBody Employee employee) {
+	public EmployeeDTO creatEmployee(@RequestBody @Valid EmployeeDTO employee) {
 		return employeeService.createEmployee(employee);
 	}
 	
