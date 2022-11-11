@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.dto.EmployeeDTO;
-import com.example.demo.model.Employee;
+
 import com.example.demo.service.EmployeeService;
 
 import lombok.AllArgsConstructor;
@@ -44,17 +44,16 @@ public class EmployeeController {
 	public EmployeeDTO creatEmployee(@RequestBody @Valid EmployeeDTO employee) {
 		return employeeService.createEmployee(employee);
 	}
-	
+
 	@DeleteMapping("/employees/{employeeId}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void deleteEmployee(@PathVariable("employeeId")long employeeId) {
+	public void deleteEmployee(@PathVariable("employeeId") long employeeId) {
 		employeeService.deleteEmployee(employeeId);
 	}
 
-	/*
-	 * @GetMapping("/employees/{id}") public ResponseEntity<Employee>
-	 * getEmployeeById(@PathVariable Long id) { return
-	 * ResponseEntity.ok(employeeService.getEmployee(id)); }
-	 */
+	@GetMapping("/employees/{id}")
+	public EmployeeDTO getEmployeeById(@PathVariable Long id) {
+		return employeeService.getEmployeeByÎd(id);
+	}
 
 }
