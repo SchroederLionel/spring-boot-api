@@ -1,10 +1,6 @@
 package com.example.demo.controller;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.List;
 
@@ -21,6 +17,7 @@ import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.jdbc.Sql.ExecutionPhase;
 import org.springframework.test.context.jdbc.SqlGroup;
 
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
 import com.example.demo.dto.EmployeeDTO;
@@ -39,6 +36,15 @@ class EmployeeControllerIntegretionTest {
 
 	private static EmployeeDTO employee;
 
+	private final String SQL_INSERT_VALID_EMPLOYEE = ""
+			+ "INSERT INTO employees (first_name,last_name,email,age) values('kevin','schmit','test@mail.com',57);";
+
+	private final String SQL_INSERT_NOT_VALID_EMAIL = ""
+			+ "INSERT INTO employees (first_name,last_name,email,age) values('kevin','schmit','test',57);";
+
+	private final String SQL_INSERT_NOT_VALID_FIRST_NAME_AND_LAST_NAME = ""
+			+ "INSERT INTO employees (first_name,last_name,email,age) values('','','test',57);";
+
 	@Autowired
 	EmployeeRepository repo;
 
@@ -54,9 +60,6 @@ class EmployeeControllerIntegretionTest {
 
 	}
 
-	final String varname1 = ""
-			+ "INSERT INTO employees (first_name,last_name,email,age) values('kevin','schmit','test@mail.com',57);";
-
 	@Test
 	void createEmployee() {
 		EmployeeDTO response = restTemplete.postForObject(baseUrl, employee, EmployeeDTO.class);
@@ -66,16 +69,58 @@ class EmployeeControllerIntegretionTest {
 	}
 
 	@Test
-	@SqlGroup({ @Sql(executionPhase = ExecutionPhase.BEFORE_TEST_METHOD, statements = varname1),
+	@SqlGroup({ @Sql(executionPhase = ExecutionPhase.BEFORE_TEST_METHOD, statements = SQL_INSERT_VALID_EMPLOYEE),
 			@Sql(executionPhase = ExecutionPhase.AFTER_TEST_METHOD, statements = "delete from employees;") })
 	void createEmployee_WithAlreadyExistingEmail_throwBadRequest() {
-		
-	
-	
-		List<Employee> employees = repo.findAll();
-		int value = employees.size();
-		assertThat(1).isEqualTo(value);
+		try {
+			restTemplete.postForObject(baseUrl, employee, EmployeeDTO.class);
+		} catch (HttpClientErrorException ex) {
+			List<Employee> employees = repo.findAll();
+			int value = employees.size();
+			assertThat(1).isEqualTo(value);
+		}
+	}
 
+	@Test
+	void createEmployee_WithNonValidEmail_throwMethodArgumentNotValidException() {
+		EmployeeDTO invalid = new EmployeeDTO("test", "test_last", "badMail", 75);
+		try {
+			restTemplete.postForObject(baseUrl, invalid, EmployeeDTO.class);
+		} catch (HttpClientErrorException ex) {
+			List<Employee> employees = repo.findAll();
+			int value = employees.size();
+			assertThat(0).isEqualTo(value);
+		}
+	}
+
+	@Test
+	void createEmployee_WithNonValid_FIRST_AND_LASTNAME() {
+		EmployeeDTO invalid_first_last_name_email = new EmployeeDTO("t", "", "goodemail.com", 75);
+		try {
+			restTemplete.postForObject(baseUrl, invalid_first_last_name_email, EmployeeDTO.class);
+		} catch (HttpClientErrorException ex) {
+			List<Employee> employees = repo.findAll();
+			int expectedSize = 0;
+			int value = employees.size();
+			assertThat(expectedSize).isEqualTo(value);
+			assertThat(ex.getMessage()).contains("First name must be between 2 and 100 characters");
+			assertThat(ex.getMessage()).contains("Last name must be between 2 and 100 characters");
+			assertThat(ex.getMessage()).contains("Invalid Email address");
+		}
+	}
+
+	@Test
+	void createEmployee_With_EMPTY_EMAIL() {
+		EmployeeDTO invalid_first_last_name_email = new EmployeeDTO("t", "", "", 75);
+		try {
+			restTemplete.postForObject(baseUrl, invalid_first_last_name_email, EmployeeDTO.class);
+		} catch (HttpClientErrorException ex) {
+			List<Employee> employees = repo.findAll();
+			int expectedSize = 0;
+			int value = employees.size();
+			assertThat(expectedSize).isEqualTo(value);
+			assertThat(ex.getMessage()).contains("Email is to short");
+		}
 	}
 
 	@Test

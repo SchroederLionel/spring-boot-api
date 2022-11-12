@@ -13,7 +13,6 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.example.demo.dto.EmployeeDTO;
-import com.example.demo.model.Employee;
 import com.example.demo.repository.EmployeeRepository;
 import com.example.demo.service.EmployeeService;
 

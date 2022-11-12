@@ -17,11 +17,11 @@ public class EmployeeDTO {
 	private Long employee_id;
 
 	@NotNull
-	@Size(min = 2, max = 100, message = "Fist name must be between 2 and 100 characters")
+	@Size(min = 2, max = 100, message = "First name must be between 2 and 100 characters")
 	private String firstName;
 
 	@NotNull
-	@Size(min = 2, max = 100, message = "Fist name must be between 2 and 100 characters")
+	@Size(min = 2, max = 100, message = "Last name must be between 2 and 100 characters")
 	private String lastName;
 
 	@NotNull
