@@ -6,6 +6,8 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+import com.example.demo.constants.Constants;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -17,16 +19,16 @@ public class EmployeeDTO {
 	private Long employee_id;
 
 	@NotNull
-	@Size(min = 2, max = 100, message = "First name must be between 2 and 100 characters")
+	@Size(min = 2, max = 100, message = Constants.FIRST_NAME_INVALID)
 	private String firstName;
 
 	@NotNull
-	@Size(min = 2, max = 100, message = "Last name must be between 2 and 100 characters")
+	@Size(min = 2, max = 100, message = Constants.LAST_NAME_INVALID)
 	private String lastName;
 
 	@NotNull
-	@Size(min = 2, message = "Email is to short")
-	@Email(message = "Invalid Email address")
+	@Size(min = 2, message = Constants.EMAIL_TO_SHORT)
+	@Email(message = Constants.EMAIL_INVALID)
 	private String email;
 
 	@NotNull
@@ -35,7 +37,7 @@ public class EmployeeDTO {
 	private Integer age;
 
 	public EmployeeDTO(@NotNull String firstName, @NotNull String lastName,
-			@Email(message = "Invalid Email address") String email, @Min(16) @Max(100) int age) {
+			@Email(message = Constants.EMAIL_INVALID) String email, @Min(16) @Max(100) int age) {
 		super();
 		this.firstName = firstName;
 		this.lastName = lastName;
