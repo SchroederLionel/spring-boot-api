@@ -32,7 +32,7 @@ public class ApplicationExceptionHandler {
 		return exception.getMessage();
 	}
 
-	@ResponseStatus(HttpStatus.BAD_REQUEST)
+	@ResponseStatus(HttpStatus.NOT_FOUND)
 	@ExceptionHandler(ResourceNotFoundException.class)
 	public String handleResourceNotFound(ResourceNotFoundException exception) {
 		return exception.getMessage();

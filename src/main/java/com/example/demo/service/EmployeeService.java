@@ -1,11 +1,10 @@
 package com.example.demo.service;
 
 import java.util.List;
-import java.util.Optional;
+
 import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.stereotype.Service;
 
@@ -17,24 +16,20 @@ import com.example.demo.repository.EmployeeRepository;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @AllArgsConstructor
-@NoArgsConstructor
 @Getter
 @Setter
 @Service
 public class EmployeeService {
-	
-	@Autowired
-	private ModelMapper mapper;
 
-	@Autowired
-	private EmployeeRepository employeeRepository;
+	private final ModelMapper mapper;
+
+	private final EmployeeRepository employeeRepository;
 
 	public List<EmployeeDTO> getAllEmployees() {
-		return employeeRepository.findAll().stream().map(employee-> mapToDTO(employee)).collect(Collectors.toList());
+		return employeeRepository.findAll().stream().map(employee -> mapToDTO(employee)).collect(Collectors.toList());
 	}
 
 	public EmployeeDTO createEmployee(EmployeeDTO employee) {
@@ -42,18 +37,15 @@ public class EmployeeService {
 		if (existsEmail) {
 			throw new BadRequestException("Email " + employee.getEmail() + " taken");
 		}
+
 		Employee em = mapToEntity(employee);
 		Employee dto = employeeRepository.save(em);
 		return mapToDTO(dto);
 	}
 
 	public EmployeeDTO getEmployeeByÎd(Long id) {
-		Optional<Employee> employee = employeeRepository.findById(id);
-		if(employee.isEmpty()) {
-			throw new  ResourceNotFoundException("Employee with the id " + id + " does not exist!");
-		}
-		return mapToDTO(employee.get());
-	
+		return employeeRepository.findById(id).map(employee -> mapToDTO(employee))
+				.orElseThrow(() -> new ResourceNotFoundException("Employee with the id " + id + " does not exist!"));
 	}
 
 	public void deleteEmployee(Long employeeId) {

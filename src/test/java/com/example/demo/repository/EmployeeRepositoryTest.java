@@ -36,18 +36,18 @@ class EmployeeRepositoryTest {
 	@Test
 	void testExistsByEmail() {
 		// Given
-		Employee employee = new Employee(1L,"Lionel", "Schroeder", "schroederlionel@gmail.com", 57);
+		Employee employee = new Employee(1L, "Lionel", "Schroeder", "schroederlionel@gmail.com", 57);
 		underTest.save(employee);
 		// When
 		boolean exists = underTest.existsByEmail(employee.getEmail());
 		// Then
 		assertThat(exists).isTrue();
 	}
-	
+
 	@Test
 	void testIfEmailDoesNotEmail() {
 		// Given
-		String email="email@test.com";
+		String email = "email@test.com";
 		// When
 		boolean exists = underTest.existsByEmail(email);
 		// Then
@@ -65,7 +65,7 @@ class EmployeeRepositoryTest {
 
 		// Then
 		assertThat(savedEmployee.get()).isEqualTo(employee);
-	
+
 	}
 
 	@Test
@@ -77,29 +77,27 @@ class EmployeeRepositoryTest {
 		underTest.save(employee);
 		underTest.save(employee2);
 		underTest.save(employee3);
-		
+
 		// When
-		 List<Employee> employees = underTest.findAll();
-		 int expectedNumberOfEmployees = 3;
-		 
-		 // Then
-		 assertThat(employees.size()).isEqualTo(expectedNumberOfEmployees);
+		List<Employee> employees = underTest.findAll();
+		int expectedNumberOfEmployees = 3;
+
+		// Then
+		assertThat(employees.size()).isEqualTo(expectedNumberOfEmployees);
 	}
-	
+
 	@Test
 	void deleteEmployee() {
 		// Given
 		Employee employee = new Employee(12345678910L, "Lionel", "Schroeder", "schroederlionel@gmail.com", 57);
 		employee = underTest.save(employee);
-		
+
 		// When
 		underTest.delete(employee);
 		Optional<Employee> savedEmployee = underTest.findById(employee.getEmployee_id());
-		
+
 		// Then
 		assertThat(savedEmployee.isEmpty()).isTrue();
 	}
-	
-	
 
 }

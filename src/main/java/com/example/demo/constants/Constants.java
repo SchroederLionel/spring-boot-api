@@ -1,12 +1,11 @@
 package com.example.demo.constants;
 
-import com.example.demo.dto.EmployeeDTO;
 
 public class Constants {
 
 
 	/**
-	 * EMPLOYEE DTO ANNOTATIONS
+	 * EMPLOYEE DTO ANNOTATION MESSAGES.
 	 */
 	public static final String FIRST_NAME_INVALID = "First name must be between 2 and 100 characters";
 	public static final String LAST_NAME_INVALID = "First name must be between 2 and 100 characters";

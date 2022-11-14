@@ -26,12 +26,11 @@ import lombok.NoArgsConstructor;
 
 @RestController
 @AllArgsConstructor
-@NoArgsConstructor
 @RequestMapping("/api")
 public class EmployeeController {
 
-	@Autowired
-	private EmployeeService employeeService;
+	
+	private final EmployeeService employeeService;
 
 	@GetMapping("/employees")
 	@ResponseStatus(HttpStatus.OK)
@@ -40,7 +39,7 @@ public class EmployeeController {
 	}
 
 	@PostMapping("/employees")
-	@ResponseStatus(HttpStatus.OK)
+	@ResponseStatus(HttpStatus.CREATED)
 	public EmployeeDTO creatEmployee(@RequestBody @Valid EmployeeDTO employee) {
 		return employeeService.createEmployee(employee);
 	}
